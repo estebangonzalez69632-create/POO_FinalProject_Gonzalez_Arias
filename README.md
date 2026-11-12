@@ -85,20 +85,20 @@ classDiagram
     Employee <|-- Manager
 
     %% COMPOSICIÓN
-    Restaurant "1" *-- "1..*" Table : contiene
-    Restaurant "1" *-- "0..*" Order : registra
-    Order "1" *-- "1..*" OrderItem : se compone de
+    Restaurant "1" *-- "1..*" Table 
+    Restaurant "1" *-- "0..*" Order 
+    Order "1" *-- "1..*" OrderItem 
 
     %% AGREGACIÓN
-    Restaurant "1" o-- "0..*" MenuItem : ofrece
-    Restaurant "1" o-- "1..*" Employee : emplea
+    Restaurant "1" o-- "0..*" MenuItem 
+    Restaurant "1" o-- "1..*" Employee 
 
     %% ASOCIACIONES
-    OrderItem "*" --> "1" MenuItem : se refiere a (varios a uno)
-    Waiter "1" --> "0..*" Order : atiende (uno a varios)
-    Table "1" --> "0..1" Order : pedido activo (uno a cero o uno)
-    Waiter "*" -- "*" Table : es asignado a (varios a varios)
+    OrderItem "*" --> "1" MenuItem 
+    Waiter "1" --> "0..*" Order 
+    Table "1" --> "0..1" Order
+    Waiter "*" -- "*" Table 
 
     %% DEPENDENCIA
-    Manager ..> Restaurant : genera reportes de
+    Manager ..> Restaurant 
 ```
