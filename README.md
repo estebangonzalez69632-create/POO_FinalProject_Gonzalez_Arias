@@ -16,10 +16,11 @@ classDiagram
 
     class Restaurant {
         -name: String
+        -adress: String
         -tables: ArrayList~Table~
         -orders: ArrayList~Order~
         -employees: ArrayList~Employee~
-        -menu: HashMap~Integer, MenuItem~
+        -menu:ArrayList~MenuItem~
         +addTable(table: Table) void
         +registerOrder(order: Order) void
         +findActiveOrders() ArrayList~Order~
