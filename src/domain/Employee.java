@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class Employee {
+import java.io.Serializable;
+
+public abstract class Employee implements Serializable {
     private int id;
     private String fullName;
     
@@ -30,6 +32,9 @@ public abstract class Employee {
         }
         this.fullName = fullName;
     }
+
+    //METODO ABSTRACTO
+    public abstract String getRole();
     
     
 }

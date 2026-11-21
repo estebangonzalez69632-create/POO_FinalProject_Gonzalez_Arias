@@ -20,6 +20,10 @@ public class Dish extends MenuItem {
           }
           this.preparationTimeMin = preparationTimeMin;
      }
+     @Override
+    public double calculatePrice() {
+        return getBasePrice()*1.08;
+    }
 
      
 }

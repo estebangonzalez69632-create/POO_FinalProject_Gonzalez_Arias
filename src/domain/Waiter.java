@@ -20,4 +20,16 @@ public class Waiter extends Employee {
           }
           this.assignedTables = assignedTables;
      } 
+     public void takeOrder(Order order) {
+        if (order == null) {
+            throw new IllegalArgumentException("El pedido no puede ser nulo.");
+        }
+        if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.PAID) {
+            throw new IllegalStateException("No se puede tomar un pedido cerrado o cancelado.");
+        }
+    }
+     @Override
+    public String getRole() {
+        return "Waiter";
+    }
 }

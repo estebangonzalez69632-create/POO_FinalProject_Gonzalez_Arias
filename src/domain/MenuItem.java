@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class MenuItem {
+import java.io.Serializable;
+
+public abstract class MenuItem implements  Serializable{
     private int id;
     private String name;
     private double basePrice;
@@ -36,5 +38,9 @@ public abstract class MenuItem {
         }
         this.basePrice = basePrice;
     }
+
+    // METODO ABSTRACTO 
+    public abstract double calculatePrice();
+
 
 }

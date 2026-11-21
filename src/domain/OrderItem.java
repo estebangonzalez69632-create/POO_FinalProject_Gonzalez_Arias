@@ -1,6 +1,8 @@
 package domain;
 
-public class OrderItem {
+import java.io.Serializable;
+
+public class OrderItem implements  Serializable{
     private int quantity;
     private MenuItem menuItem;
     public OrderItem(int quantity, MenuItem menuItem) {
@@ -24,5 +26,9 @@ public class OrderItem {
         throw new IllegalArgumentException("el item del menu no puede ser nulo");
        }
         this.menuItem = menuItem;
+    }
+
+    public double getSubtotal() {
+        return this.menuItem.calculatePrice() * this.quantity;
     }
 }

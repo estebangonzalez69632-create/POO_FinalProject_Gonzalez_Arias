@@ -1,6 +1,7 @@
 package domain;
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Restaurant {
+public class Restaurant implements Serializable {
     private String name;
     private ArrayList<Table> tables;
     private ArrayList<Order> orders;
@@ -16,7 +17,7 @@ public class Restaurant {
         setMenu(menu);
     }
     // SETERS AND GETTERS
-    public String getName() {
+    public String getName() {   
         return name;
     }
     public void setName(String name) {
@@ -130,7 +131,11 @@ public class Restaurant {
 
     public void removeTable(int number) {
         for (int i = 0; i < this.tables.size(); i++) {
-            if (this.tables.get(i).getNumber() == number) {
+            Table current = this.tables.get(i);
+            if (current.getNumber() == number) {
+                if (current.getStatus() == TableStatus.OCCUPIED) {
+                    throw new IllegalStateException("No se puede eliminar una mesa que está ocupada.");
+                }
                 this.tables.remove(i);
                 return;
             }
@@ -177,9 +182,12 @@ public class Restaurant {
     }
 
     //CRUD PEDIDOS
-    public void addOrder(Order order) {
+    public void registerOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException("No se puede registrar un pedido nulo.");
+        }
+        if (getOrderById(order.getId()) != null) {
+            throw new IllegalArgumentException("Ya existe un pedido con ese ID.");
         }
         this.orders.add(order);
     }
@@ -195,24 +203,71 @@ public class Restaurant {
 
     public void updateOrderStatus(int id, OrderStatus newStatus) {
         Order order = getOrderById(id);
-        if (order != null) {
-            order.setStatus(newStatus);
-        } else {
+        if (order == null) {
             throw new IllegalArgumentException("Pedido no encontrado.");
         }
+        if (order.getStatus() == OrderStatus.PAID || order.getStatus() == OrderStatus.CANCELLED) {
+            throw new IllegalStateException("No se puede modificar un pedido ya pagado o cancelado.");
+        }
+        order.setStatus(newStatus);
+        if ((newStatus == OrderStatus.PAID || newStatus == OrderStatus.CANCELLED) && order.getTable() != null) {
+            order.getTable().free();
+        }
     }
 
-    public void removeOrder(int id) {
+    public void cancelOrder(int id) {
+        Order order = getOrderById(id);
+        if (order == null) {
+            throw new IllegalArgumentException("Pedido no encontrado para cancelar.");
+        }
+        if (order.getStatus() == OrderStatus.PAID) {
+            throw new IllegalStateException("No se puede cancelar un pedido que ya fue pagado.");
+        }
+        order.setStatus(OrderStatus.CANCELLED);
+        if (order.getTable() != null) {
+            order.getTable().free();
+        }
+    }
+    public ArrayList<Order> findActiveOrders() {
+        ArrayList<Order> activeOrders = new ArrayList<>();
         for (int i = 0; i < this.orders.size(); i++) {
-            if (this.orders.get(i).getId() == id) {
-                this.orders.remove(i);
-                return;
+            Order current = this.orders.get(i);
+            if (current.getStatus() == OrderStatus.OPEN || current.getStatus() == OrderStatus.SERVED) {
+                activeOrders.add(current);
             }
         }
-        throw new IllegalArgumentException("Pedido no encontrado para eliminar.");
+        return activeOrders;
+    }
+
+    // 2. Método de tu diagrama UML: calcula el total de ventas pagadas (quita el error en Manager)
+    public double calculateDailySales() {
+        double totalSales = 0.0;
+        for (int i = 0; i < this.orders.size(); i++) {
+            Order current = this.orders.get(i);
+            if (current.getStatus() == OrderStatus.PAID) {
+                totalSales += current.calculateTotal();
+            }
+        }
+        return totalSales;
+    }
+
+    // 3. Componente de apoyo a decisiones (obligatorio en rúbrica): recomienda la mejor mesa libre
+    public Table recommendTable(int guests) {
+        if (guests <= 0) {
+            throw new IllegalArgumentException("La cantidad de comensales debe ser mayor a 0.");
+        }
+        Table bestTable = null;
+        for (int i = 0; i < this.tables.size(); i++) {
+            Table current = this.tables.get(i);
+            if (current.getStatus() == TableStatus.FREE && current.getCapacity() >= guests) {
+                if (bestTable == null || current.getCapacity() < bestTable.getCapacity()) {
+                    bestTable = current;
+                }
+            }
+        }
+        return bestTable;
     }
 }
-
 
 
 

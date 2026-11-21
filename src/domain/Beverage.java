@@ -19,6 +19,10 @@ public class Beverage extends MenuItem {
      public int getSizeMl() {
           return sizeMl;
      }
+     @Override
+    public double calculatePrice() {
+        return getBasePrice();
+    }
 
      
 }

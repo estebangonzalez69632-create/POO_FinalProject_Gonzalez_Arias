@@ -1,13 +1,21 @@
 package domain;
 
-public class Table {
+import java.io.Serializable;
+
+public class Table implements Serializable {
  private int number;
     private int capacity;
     private TableStatus status;
+    private Order activeOrder;
+
     public Table(int number, int capacity, TableStatus status) {
         setNumber(number);
         setCapacity(capacity);
         setStatus(status);
+        this.activeOrder=null;
+    }
+    public Table(int number, int capacity) {
+        this(number, capacity, TableStatus.FREE);
     }
     public int getNumber() {
         return number;
@@ -35,5 +43,27 @@ public class Table {
             throw new IllegalArgumentException("el estado no puede ser nulo");
         }
         this.status = status;
-    }   
+    }  
+    
+   
+    
+    public Order getActiveOrder() {
+        return activeOrder;
+    }
+
+    public void setActiveOrder(Order activeOrder) {
+        this.activeOrder = activeOrder;
+    }
+
+    public void occupy() {
+        if (this.status == TableStatus.OCCUPIED) {
+            throw new IllegalStateException("La mesa ya se encuentra ocupada.");
+        }
+        this.status = TableStatus.OCCUPIED;
+    }
+
+    public void free() {
+        this.status = TableStatus.FREE;
+        this.activeOrder = null;
+    }
 }
