@@ -145,4 +145,4 @@ classDiagram
     MenuItem <|-- Beverage
     Employee <|-- Waiter
     Employee <|-- Manager
-    Manager ..> Restaurant : reports on
+    Manager ..> Restaurant 
