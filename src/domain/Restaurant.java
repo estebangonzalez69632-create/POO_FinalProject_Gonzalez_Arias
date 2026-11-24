@@ -1,13 +1,16 @@
 package domain;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+
 public class Restaurant implements Serializable {
     private String name;
     private ArrayList<Table> tables;
     private ArrayList<Order> orders;
     private ArrayList<Employee> employees;
     private ArrayList<MenuItem> menu;
-    //CONSTRUCTOR
+
+    // CONSTRUCTOR
     public Restaurant(String name, ArrayList<Table> tables, ArrayList<Order> orders, ArrayList<Employee> employees,
             ArrayList<MenuItem> menu) {
         setName(name);
@@ -16,55 +19,64 @@ public class Restaurant implements Serializable {
         setEmployees(employees);
         setMenu(menu);
     }
+
     // SETERS AND GETTERS
-    public String getName() {   
+    public String getName() {
         return name;
     }
+
     public void setName(String name) {
-        if (name==null || name.length()==0){
+        if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("el nombre del restaurante mo puede estar vacio o ser nulo");
         }
         this.name = name;
     }
+
     public ArrayList<Table> getTables() {
         return tables;
     }
-    
+
     public void setTables(ArrayList<Table> tables) {
-        if (tables==null){
-             throw new IllegalArgumentException("la lista de mesas no puede ser nula");
+        if (tables == null) {
+            throw new IllegalArgumentException("la lista de mesas no puede ser nula");
         }
         this.tables = tables;
     }
+
     public ArrayList<Order> getOrders() {
         return orders;
     }
+
     public void setOrders(ArrayList<Order> orders) {
-        if(orders==null){
+        if (orders == null) {
             throw new IllegalArgumentException("la lista de pedidos no puede ser nula");
         }
         this.orders = orders;
     }
+
     public ArrayList<Employee> getEmployees() {
         return employees;
     }
+
     public void setEmployees(ArrayList<Employee> employees) {
-        if(employees==null){
+        if (employees == null) {
             throw new IllegalArgumentException("la lista de empleados no puede ser nula");
         }
         this.employees = employees;
     }
+
     public ArrayList<MenuItem> getMenu() {
         return menu;
     }
+
     public void setMenu(ArrayList<MenuItem> menu) {
-        if (menu== null){
+        if (menu == null) {
             throw new IllegalArgumentException("el menu no puede ser nula");
         }
         this.menu = menu;
     }
 
-    //CRUD EMPLEADOS
+    // CRUD EMPLEADOS
 
     public void addEmployee(Employee employee) {
         if (employee == null) {
@@ -101,7 +113,7 @@ public class Restaurant implements Serializable {
         throw new IllegalArgumentException("Empleado no encontrado para eliminar.");
     }
 
-    //CRUD DE MESAS
+    // CRUD DE MESAS
 
     public void addTable(Table table) {
         if (table == null) {
@@ -143,7 +155,7 @@ public class Restaurant implements Serializable {
         throw new IllegalArgumentException("Mesa no encontrada para eliminar.");
     }
 
-    //CRUD DE MENU
+    // CRUD DE MENU
 
     public void addMenuItem(MenuItem item) {
         if (item == null) {
@@ -181,7 +193,7 @@ public class Restaurant implements Serializable {
         throw new IllegalArgumentException("Ítem del menú no encontrado para eliminar.");
     }
 
-    //CRUD PEDIDOS
+    // CRUD PEDIDOS
     public void registerOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException("No se puede registrar un pedido nulo.");
@@ -228,6 +240,7 @@ public class Restaurant implements Serializable {
             order.getTable().free();
         }
     }
+
     public ArrayList<Order> findActiveOrders() {
         ArrayList<Order> activeOrders = new ArrayList<>();
         for (int i = 0; i < this.orders.size(); i++) {
@@ -239,7 +252,8 @@ public class Restaurant implements Serializable {
         return activeOrders;
     }
 
-    // 2. Método de tu diagrama UML: calcula el total de ventas pagadas (quita el error en Manager)
+    // 2. Método de tu diagrama UML: calcula el total de ventas pagadas (quita el
+    // error en Manager)
     public double calculateDailySales() {
         double totalSales = 0.0;
         for (int i = 0; i < this.orders.size(); i++) {
@@ -251,7 +265,8 @@ public class Restaurant implements Serializable {
         return totalSales;
     }
 
-    // 3. Componente de apoyo a decisiones (obligatorio en rúbrica): recomienda la mejor mesa libre
+    // 3. Componente de apoyo a decisiones (obligatorio en rúbrica): recomienda la
+    // mejor mesa libre
     public Table recommendTable(int guests) {
         if (guests <= 0) {
             throw new IllegalArgumentException("La cantidad de comensales debe ser mayor a 0.");
@@ -268,8 +283,3 @@ public class Restaurant implements Serializable {
         return bestTable;
     }
 }
-
-
-
-
-

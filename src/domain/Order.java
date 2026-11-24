@@ -4,51 +4,53 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Order implements Serializable {
-     private int id;
+    private int id;
     private OrderStatus status;
     private ArrayList<OrderItem> items;
-    private Table table;   // <--- AGREGADO (Relación con Table en UML)
+    private Table table; // <--- AGREGADO (Relación con Table en UML)
     private Waiter waiter;
 
-
-    public Order(int id, OrderStatus status, ArrayList<OrderItem> items) {
-       setId(id);
+    public Order(int id, Table table, Waiter waiter) {
+        setId(id);
         setTable(table);
         setWaiter(waiter);
-        this.status = OrderStatus.OPEN;
-        this.items = new ArrayList<>();
-        this.table.occupy();
-        this.table.setActiveOrder(this);
+        setStatus(status);
+        this.items = new ArrayList<OrderItem>();
     }
+
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
-        if(id<=0){
+        if (id <= 0) {
             throw new IllegalArgumentException("el id no puede ser negativo");
         }
         this.id = id;
     }
+
     public OrderStatus getStatus() {
         return status;
     }
+
     public void setStatus(OrderStatus status) {
-       if(status==null){
-        throw new IllegalArgumentException("El estado del pedido no puede ser nulo.");
-       }
+        if (status == null) {
+            throw new IllegalArgumentException("El estado del pedido no puede ser nulo.");
+        }
         this.status = status;
     }
+
     public ArrayList<OrderItem> getItems() {
         return items;
     }
+
     public void setItems(ArrayList<OrderItem> items) {
-        if(items==null){
+        if (items == null) {
             throw new IllegalArgumentException("La lista de ítems del pedido no puede ser nula.");
         }
         this.items = items;
 
     }
-
 
     public Table getTable() {
         return table;

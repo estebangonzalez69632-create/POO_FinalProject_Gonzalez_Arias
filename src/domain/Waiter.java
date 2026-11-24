@@ -3,24 +3,25 @@ package domain;
 import java.util.ArrayList;
 
 public class Waiter extends Employee {
-     private ArrayList<Table> assignedTables;
+    private ArrayList<Table> assignedTables;
 
-     public Waiter(int id, String fullName, ArrayList<Table> assignedTables) {
-          super(id, fullName);
-          setAssignedTables(assignedTables);
-     }
+    public Waiter(int id, String fullName, ArrayList<Table> assignedTables) {
+        super(id, fullName);
+        setAssignedTables(assignedTables);
+    }
 
-     public ArrayList<Table> getAssignedTables() {
-          return assignedTables;
-     }
+    public ArrayList<Table> getAssignedTables() {
+        return assignedTables;
+    }
 
-     public void setAssignedTables(ArrayList<Table> assignedTables) {
-          if (assignedTables==null){
-              throw new IllegalArgumentException("La lista de mesas asignadas no puede ser nula"); 
-          }
-          this.assignedTables = assignedTables;
-     } 
-     public void takeOrder(Order order) {
+    public void setAssignedTables(ArrayList<Table> assignedTables) {
+        if (assignedTables == null) {
+            throw new IllegalArgumentException("La lista de mesas asignadas no puede ser nula");
+        }
+        this.assignedTables = assignedTables;
+    }
+
+    public void takeOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException("El pedido no puede ser nulo.");
         }
@@ -28,7 +29,8 @@ public class Waiter extends Employee {
             throw new IllegalStateException("No se puede tomar un pedido cerrado o cancelado.");
         }
     }
-     @Override
+
+    @Override
     public String getRole() {
         return "Waiter";
     }
