@@ -121,25 +121,25 @@ classDiagram
     }
 
     %% Relationships between layers
-    Main --> Restaurant : manages
-    Main --> PersistenceManager : uses
-    Main --> CsvExporter : uses
-    PersistenceManager ..> Restaurant : serializes
-    CsvExporter ..> Restaurant : reads
-    CsvExporter ..> Order : exports
+    Main --> Restaurant 
+    Main --> PersistenceManager 
+    Main --> CsvExporter 
+    PersistenceManager ..> Restaurant 
+    CsvExporter ..> Restaurant 
+    CsvExporter ..> Order 
 
     %% Domain relationships
-    Restaurant "1" *-- "*" Table : owns
-    Restaurant "1" *-- "*" Order : registers
-    Restaurant "1" o-- "*" Employee : employs
-    Restaurant "1" o-- "*" MenuItem : offers
+    Restaurant "1" *-- "*" Table 
+    Restaurant "1" *-- "*" Order 
+    Restaurant "1" o-- "*" Employee 
+    Restaurant "1" o-- "*" MenuItem 
 
-    Table --> TableStatus : has
-    Order --> OrderStatus : has
-    Order --> Table : assigned to
-    Order --> Waiter : attended by
-    Order "1" *-- "*" OrderItem : contains
-    OrderItem --> MenuItem : references
+    Table --> TableStatus
+    Order --> OrderStatus 
+    Order --> Table 
+    Order --> Waiter 
+    Order "1" *-- "*" OrderItem 
+    OrderItem --> MenuItem 
 
     MenuItem <|-- Dish
     MenuItem <|-- Beverage
