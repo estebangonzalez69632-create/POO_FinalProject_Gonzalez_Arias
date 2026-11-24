@@ -12,94 +12,137 @@ Sistema para el personal de un restaurante que permite registrar pedidos, calcul
 
 ```mermaid
 classDiagram
-    direction TB
-
-    class Restaurant {
-        -name: String
-        -adress: String
-        -tables: ArrayList~Table~
-        -orders: ArrayList~Order~
-        -employees: ArrayList~Employee~
-        -menu:ArrayList~MenuItem~
-        +addTable(table: Table) void
-        +registerOrder(order: Order) void
-        +findActiveOrders() ArrayList~Order~
-        +addMenuItem(item: MenuItem) void
-        +calculateDailySales() double
+    namespace ui {
+        class Main {
+            -Restaurant restaurant$
+            -PersistenceManager persistence$
+            -CsvExporter csvExporter$
+            -Scanner scanner$
+            +main(String[] args)$ void
+        }
     }
 
-    class MenuItem {
-        <<abstract>>
-        -id: int
-        -name: String
-        -basePrice: double
-        +calculatePrice() double*
-    }
-    class Dish {
-        -preparationTimeMin: int
-        +calculatePrice() double
-    }
-    class Beverage {
-        -sizeMl: int
-        +calculatePrice() double
+    namespace data {
+        class PersistenceManager {
+            +saveRestaurant(Restaurant restaurant, String filePath) void
+            +loadRestaurant(String filePath) Restaurant
+        }
+
+        class CsvExporter {
+            +exportOrdersReport(Restaurant restaurant, String filePath) void
+        }
     }
 
-    class Employee {
-        <<abstract>>
-        -id: int
-        -fullName: String
-        +getRole() String*
-    }
-    class Waiter {
-        -assignedTables: ArrayList~Table~
-        +takeOrder(order: Order) void
-        +getRole() String
-    }
-    class Manager {
-        +generateReport(restaurant: Restaurant) String
-        +getRole() String
+    namespace domain {
+        class Restaurant {
+            -String name
+            -ArrayList~Table~ tables
+            -ArrayList~Order~ orders
+            -ArrayList~Employee~ employees
+            -ArrayList~MenuItem~ menu
+            +recommendTable(int guests) Table
+            +registerOrder(Order order) void
+            +updateOrderStatus(int orderId, OrderStatus status) void
+            +cancelOrder(int orderId) void
+            +findActiveOrders() ArrayList~Order~
+            +calculateDailySales() double
+        }
+
+        class Table {
+            -int number
+            -int capacity
+            -TableStatus status
+        }
+
+        class TableStatus {
+            <<enumeration>>
+            FREE
+            OCCUPIED
+        }
+
+        class Order {
+            -int id
+            -Table table
+            -Waiter waiter
+            -OrderStatus status
+            -ArrayList~OrderItem~ items
+            +addItem(OrderItem item) void
+            +calculateTotal() double
+        }
+
+        class OrderStatus {
+            <<enumeration>>
+            OPEN
+            SERVED
+            PAID
+            CANCELLED
+        }
+
+        class OrderItem {
+            -int quantity
+            -MenuItem menuItem
+            +calculateSubtotal() double
+        }
+
+        class MenuItem {
+            <<abstract>>
+            -int id
+            -String name
+            -double basePrice
+            +calculatePrice()* double
+        }
+
+        class Dish {
+            -int preparationTime
+            +calculatePrice() double
+        }
+
+        class Beverage {
+            -int sizeMl
+            +calculatePrice() double
+        }
+
+        class Employee {
+            <<abstract>>
+            -int id
+            -String fullName
+            +getRole()* String
+        }
+
+        class Waiter {
+            -ArrayList~Table~ assignedTables
+            +getRole() String
+        }
+
+        class Manager {
+            +getRole() String
+            +generateReport(Restaurant restaurant) String
+        }
     }
 
-    class Table {
-        -number: int
-        -capacity: int
-        -status: TableStatus
-        +occupy() void
-        +free() void
-    }
-    class Order {
-        -id: int
-        -status: OrderStatus
-        -items: ArrayList~OrderItem~
-        +addItem(item: OrderItem) void
-        +calculateTotal() double
-    }
-    class OrderItem {
-        -quantity: int
-        +getSubtotal() double
-    }
+    %% Relationships between layers
+    Main --> Restaurant 
+    Main --> PersistenceManager 
+    Main --> CsvExporter 
+    PersistenceManager ..> Restaurant 
+    CsvExporter ..> Restaurant 
+    CsvExporter ..> Order 
 
-    %% HERENCIA
+    %% Domain relationships
+    Restaurant "1" *-- "*" Table 
+    Restaurant "1" *-- "*" Order 
+    Restaurant "1" o-- "*" Employee 
+    Restaurant "1" o-- "*" MenuItem 
+
+    Table --> TableStatus
+    Order --> OrderStatus 
+    Order --> Table 
+    Order --> Waiter 
+    Order "1" *-- "*" OrderItem 
+    OrderItem --> MenuItem 
+
     MenuItem <|-- Dish
     MenuItem <|-- Beverage
     Employee <|-- Waiter
     Employee <|-- Manager
-
-    %% COMPOSICIÓN
-    Restaurant "1" *-- "1..*" Table 
-    Restaurant "1" *-- "0..*" Order 
-    Order "1" *-- "1..*" OrderItem 
-
-    %% AGREGACIÓN
-    Restaurant "1" o-- "0..*" MenuItem 
-    Restaurant "1" o-- "1..*" Employee 
-
-    %% ASOCIACIONES
-    OrderItem "*" --> "1" MenuItem 
-    Waiter "1" --> "0..*" Order 
-    Table "1" --> "0..1" Order
-    Waiter "*" -- "*" Table 
-
-    %% DEPENDENCIA
     Manager ..> Restaurant 
-```
