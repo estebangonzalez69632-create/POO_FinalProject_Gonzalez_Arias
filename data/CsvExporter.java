@@ -37,13 +37,12 @@ public class CsvExporter {
 
             // 3. Escribir los datos de cada pedido separados por comas
             writer.println(
-                current.getId() + "," +
-                tableNumber + "," +
-                waiterName + "," +
-                current.getStatus() + "," +
-                current.getItems().size() + "," +
-                current.calculateTotal()
-            );
+                    current.getId() + "," +
+                            tableNumber + "," +
+                            waiterName + "," +
+                            current.getStatus() + "," +
+                            current.getItems().size() + "," +
+                            current.calculateTotal());
         }
 
         writer.close();
