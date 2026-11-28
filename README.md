@@ -81,7 +81,7 @@ classDiagram
         class OrderItem {
             -int quantity
             -MenuItem menuItem
-            +calculateSubtotal() double
+            +getSubtotal() double
         }
 
         class MenuItem {
@@ -93,7 +93,7 @@ classDiagram
         }
 
         class Dish {
-            -int preparationTime
+            -int preparationTimeMin
             +calculatePrice() double
         }
 
@@ -120,26 +120,30 @@ classDiagram
         }
     }
 
-    %% Relationships between layers
-    Main --> Restaurant 
-    Main --> PersistenceManager 
-    Main --> CsvExporter 
-    PersistenceManager ..> Restaurant 
-    CsvExporter ..> Restaurant 
-    CsvExporter ..> Order 
+    Main --> Restaurant
+    Main --> PersistenceManager
+    Main --> CsvExporter
+    PersistenceManager ..> Restaurant
+    CsvExporter ..> Restaurant
+    CsvExporter ..> Order
 
-    %% Domain relationships
-    Restaurant "1" *-- "*" Table 
-    Restaurant "1" *-- "*" Order 
-    Restaurant "1" o-- "*" Employee 
-    Restaurant "1" o-- "*" MenuItem 
+    Restaurant "1" *-- "*" Table
+    Restaurant "1" *-- "*" Order
+    Restaurant "1" --> "*" Employee
+    Restaurant "1" --> "*" MenuItem
 
     Table --> TableStatus
-    Order --> OrderStatus 
-    Order --> Table 
-    Order --> Waiter 
-    Order "1" *-- "*" OrderItem 
-    OrderItem --> MenuItem 
+    Order --> OrderStatus
+    Order --> Table
+    Order --> Waiter
+    Order "1" *-- "*" OrderItem
+    OrderItem --> MenuItem
+
+    MenuItem <|-- Dish
+    MenuItem <|-- Beverage
+    Employee <|-- Waiter
+    Employee <|-- Manager
+    Manager ..> Restaurant
 
     MenuItem <|-- Dish
     MenuItem <|-- Beverage
